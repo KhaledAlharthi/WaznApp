@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
+    <data>
+        <import type="android.view.View"/>
+        <import type="com.waznapp.database.TransactionViewModel.TransactionState"/>
+        <variable
+            name="transactionViewModel"
+            type="com.waznapp.database.TransactionViewModel" />
+        <variable
+            name="purposeListAdapter"
+            type="com.waznapp.PurposeListAdapter" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bottomSheet"
+        android:layout_gravity="bottom"
+        style="@style/BottomSheetStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!--
+                Progress bar will be shown when transaction state is "Loading"
+               when progress bar is shown, everything else will be hidden  -->
+        <ProgressBar
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginVertical="16dp"
+            showOnLoading="@{transactionViewModel.transactionState}"
+            android:id="@+id/progressBar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"/>
+
+        <!--
+            Actual Transaction Details Views Below
+        -->
+        <TextView
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="@string/new_transaction_dialog_title"
+            android:theme="@style/TitleText"
+            android:layout_marginVertical="16dp"
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            app:layout_constraintTop_toBottomOf="@id/title"
+            android:id="@+id/amountET"
+            android:layout_marginVertical="8dp"
+            hideOnLoading="@{transactionViewModel.transactionState}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.google.android.material.textfield.TextInputEditText
+                android:inputType="numberDecimal"
+                android:text='@={ "" + transactionViewModel.pendingTransaction.amount}'
+                android:hint="@string/transaction_amount_hint"
+                android:autofillHints="@string/transaction_amount_autofill_hint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            app:layout_constraintTop_toBottomOf="@id/amountET"
+            android:layout_marginVertical="8dp"
+            android:id="@+id/merchantET"
+            hideOnLoading="@{transactionViewModel.transactionState}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:inputType="text"
+                android:text="@={transactionViewModel.pendingTransaction.merchant}"
+                android:hint="@string/transaction_merchant_hint"
+                android:autofillHints="@null"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            bind:adapter="@{purposeListAdapter}"
+            hideOnLoading="@{transactionViewModel.transactionState}"
+            app:layout_constraintTop_toBottomOf="@id/merchantET"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/purposeList"/>
+
+        <Spinner
+            app:layout_constraintTop_toBottomOf="@id/purposeList"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginVertical="8dp"
+            android:id="@+id/priorityList"
+            hideOnLoading="@{transactionViewModel.transactionState}"
+            bind:newValue="@={transactionViewModel.pendingTransaction.priority}"
+            android:entries="@array/priorities"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            app:layout_constraintTop_toBottomOf="@id/priorityList"
+            android:layout_marginVertical="8dp"
+            android:id="@+id/extraInfo"
+            hideOnLoading="@{transactionViewModel.transactionState}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.google.android.material.textfield.TextInputEditText
+                android:text="@={transactionViewModel.pendingTransaction.userExtraInfo}"
+                android:inputType="text"
+                android:autofillHints="@null"
+                android:hint="@string/transaction_extra_info_hint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+
+        <Button
+            app:layout_constraintTop_toBottomOf="@id/extraInfo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/buttonAdd"
+            android:layout_marginVertical="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_transaction"
+            hideOnLoading="@{transactionViewModel.transactionState}"
+            android:onClick="@{() -> transactionViewModel.insert(transactionViewModel.pendingTransaction)}"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

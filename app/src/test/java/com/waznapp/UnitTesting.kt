@@ -75,7 +75,8 @@ class UnitTesting {
     fun extractMerchantTest (){
         assertEquals("STC Pay", extractMerchantName(CASE_1_MESSAGE))
 
-        assertEquals(null, extractMerchantName(CASE_2_MESSAGE))
+
+        assertEquals("", extractMerchantName(CASE_2_MESSAGE))
 
         assertEquals("Rabie Al Safwa Est~Al", extractMerchantName(CASE_3_MESSAGE))
     }

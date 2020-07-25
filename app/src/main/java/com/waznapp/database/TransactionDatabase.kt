@@ -9,7 +9,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.*
 
-@Database (entities = arrayOf(Transaction::class), version = 2, exportSchema = false)
+@Database (entities = arrayOf(Transaction::class), version = 3, exportSchema = false)
 public abstract class TransactionDatabase : RoomDatabase() {
 
 
@@ -26,7 +26,7 @@ public abstract class TransactionDatabase : RoomDatabase() {
                     val transactionDao = database.transactionDao()
 
                     // Delete all content here.
-                    transactionDao.deleteAllTransactions()
+                    //transactionDao.deleteAllTransactions()
                 }
             }
         }

@@ -1,7 +1,12 @@
 package com.waznapp.Utilities
 
+import android.Manifest
+import android.app.Activity
 import android.content.Context
+import android.content.pm.PackageManager
 import androidx.annotation.Nullable
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.waznapp.R
 import com.waznapp.database.Transaction
 import java.text.SimpleDateFormat
@@ -29,7 +34,7 @@ fun handleMessage (context : Context, message : String){
         val date = extractDate(message)
         val currency = extractCurrency(message)
 
-        var merchant : String? = null
+        var merchant : String = ""
         when (type) {
             PURCHASE -> {
                 merchant = extractMerchantName (message)
@@ -133,11 +138,11 @@ fun isBank (message : String) : Boolean {
     * */
     val possibleWords = arrayOf("دفع", "شراء", "صادرة", "راتب")
     /*
-    *   Split message string to an array of words to search for possible_words
+    *   Split message string to an array of words to search for possibleWords
     * */
     val msgWords = message.toLowerCase(Locale.US).split("\\s+".toRegex())
     /*
-    *   Iterate through the words, if it contains any of possibleWords, return True otherwise False.
+    *   Iterate through the words, if they contain any of possibleWords, return True otherwise False.
     * */
     return msgWords.any { it in possibleWords }
 }
@@ -178,9 +183,9 @@ fun extractPrice (msg : String) : Double {
 /**
  *  Extracts merchant name from a Bank SMS message
  *  @param message Content of the SMS message
- *  @return Merchant name, or null if not found
+ *  @return Merchant name, or empty if not found
  */
-fun extractMerchantName (message : String) : String? {
+fun extractMerchantName (message : String) : String {
     /*
     *   Define a regex patter for English sentences
     *       it'll also match '~' character found in SMS messages
@@ -199,7 +204,7 @@ fun extractMerchantName (message : String) : String? {
         }
     }
     // return null if merchant name couldn't be found in SMS message
-    return null
+    return ""
 }
 
 
@@ -256,7 +261,7 @@ fun extractCurrency (message : String) : String {
     if (currency.size  == 1){
         return currency.first()
     }
-    // Return null otherwise
+    // Return default otherwise
     return DEFAULT_CURRENCY
 }
 
@@ -304,4 +309,24 @@ fun detectTransactionType (message : String) : String {
 }
 
 
+/**
+ *  Checks the availability of SMS permission
+ *  @param context Activity context reference
+ *  @return True if permission is granted. False otherwise.
+ * */
+fun isSmsPermissionGranted (context: Activity) : Boolean {
+    return ContextCompat.checkSelfPermission(context, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED
+            &&
+            ContextCompat.checkSelfPermission(context, Manifest.permission.RECEIVE_SMS) == PackageManager.PERMISSION_GRANTED
+}
 
+/**
+ * Performs SMS permission request
+ * @param context Activity context reference
+ * @param request_code Request code to handle the result of the request in onRequestPermissionsResult
+ * */
+fun requestSmsPermissions (context : Activity, request_code: Int){
+    ActivityCompat.requestPermissions(context,
+        arrayOf(Manifest.permission.READ_SMS, Manifest.permission.RECEIVE_SMS),
+        request_code)
+}

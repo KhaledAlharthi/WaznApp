@@ -6,7 +6,6 @@ import androidx.room.*
 @Dao
 interface TransactionDAO {
 
-
     @Query ("SELECT * FROM transactions ORDER BY date DESC")
     fun getAllTransactions (): LiveData<List<Transaction>>
 

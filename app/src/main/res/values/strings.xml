@@ -1,8 +1,7 @@
 <resources>
     <string name="app_name">وازن</string>
     <string name="transaction_notification_title">عملية جديدة</string>
-    <string name="yes_record_transaction">نعم أرغب</string>
-    <string name="no_record_transaction">لا أرغب</string>
+    <string name="yes_record_transaction">تسجيل العملية</string>
     <string name="purchase_detected_notification">عملية بقيمة %.2f هل ترغب بتسجيلها؟</string>
     <string name="purchase_detected_notification_no_amount">لاحظنا وجود عملية دفع هل ترغب بتسجيلها؟</string>
     <string name="transfer_detected_notification">حوالة بقيمة %.2f هل ترغب بتسجيلها؟</string>
@@ -11,4 +10,35 @@
     <string name="channel_name">التنبيهات</string>
     <string name="channel_description">الإشعارات العامة الخاصة بالتطبيق</string>
     <string name="balance_is">رصيدك هو %s ريال</string>
+
+    <string name="transaction_amount_hint">قيمة العملية</string>
+    <string name="transaction_amount_autofill_hint">price,amount</string>
+    <string name="transaction_extra_info_hint">معلومات إضافة عن العملية (اختياري)</string>
+    <string name="transaction_merchant_hint">اسم التاجر</string>
+
+    <string name="new_transaction_dialog_title">عملية جديدة</string>
+
+    <string name="add_transaction">تسجيل العملية</string>
+    <string name="cancel">إلغاء</string>
+
+    <string name="sms_required_error_message">السماح بإذن قراءة الرسائل النصية متطلب لتفعيل خاصية الكشف التلقائي عن العمليات</string>
+
+    <string name="user_pref">user_pref</string>
+    <string name="transaction_detection_key">transaction_detection_key</string>
+
+
+    <string name="merchant_intent_key">merchant</string>
+    <string name="notification_type_intent_key">type_notification</string>
+    <string name="amount_intent_key">amount</string>
+    <string name="currency_intent_key">currency</string>
+    <string name="date_intent_key">date</string>
+    <string name="transaction_type_intent_key">transaction_type</string>
+    <string name="notification_data_intent_key">notification_data</string>
+
+
+    <string-array name="priorities">
+        <item>أولوية عالية</item>
+        <item>أولوية متوسطة</item>
+        <item>أولوية متدنية</item>
+    </string-array>
 </resources>

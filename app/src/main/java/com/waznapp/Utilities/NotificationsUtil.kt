@@ -7,6 +7,8 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.*
 import android.os.Build
+import android.os.Bundle
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.waznapp.MainActivity
@@ -41,14 +43,17 @@ private fun createNotificationChannel(context : Context) {
 
         // Create an explicit intent for an Activity in your app
         val intent = Intent(context, MainActivity::class.java).apply {
+            val bundle = Bundle()
+            bundle.putString(context.getString(R.string.notification_type_intent_key), TRANSACTION_NOTIFICATION_TYPE)
+            bundle.putDouble(context.getString(R.string.amount_intent_key), transaction.amount)
+            bundle.putString(context.getString(R.string.merchant_intent_key), transaction.merchant)
+            bundle.putString(context.getString(R.string.currency_intent_key), transaction.currency)
+            bundle.putLong(context.getString(R.string.date_intent_key), transaction.date)
+            bundle.putString(context.getString(R.string.transaction_type_intent_key), transaction.type)
+            putExtra(context.getString(R.string.notification_data_intent_key), bundle)
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
-        intent.putExtra("amount", transaction.amount)
-        intent.putExtra("merchant", transaction.merchant)
-        intent.putExtra("currency", transaction.currency)
-        intent.putExtra("date", transaction.date)
-        intent.putExtra("type", transaction.type)
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val notificationTitle = context.getString(R.string.transaction_notification_title)
 
@@ -66,7 +71,6 @@ private fun createNotificationChannel(context : Context) {
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setContentIntent(pendingIntent)
             .addAction(android.R.drawable.arrow_up_float, context.getString(R.string.yes_record_transaction), pendingIntent)
-            .addAction(android.R.drawable.arrow_down_float, context.getString(R.string.no_record_transaction), null)
             .setAutoCancel(true)
 
         with(NotificationManagerCompat.from(context)) {

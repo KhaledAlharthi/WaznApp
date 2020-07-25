@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
     <data>
+        <import type="androidx.lifecycle.LiveData"/>
         <variable
-            name="transaction"
+            name="isSubscribedToTransactionDetection"
+            type="LiveData&lt;Boolean>" />
+        <variable
+            name="eventHandler"
+            type="com.waznapp.MainActivity.EventHandler" />
+        <variable
+            name="transactionVM"
             type="com.waznapp.database.TransactionViewModel" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,11 +24,22 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text='@{@string/balance_is(transaction.balance.toString()?? "0.0")}'
+        android:text='@{@string/balance_is(transactionVM.balance.toString()?? "0.0")}'
         app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/textView"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+    <Button
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text='@{"Subscribe " + isSubscribedToTransactionDetection}'
+        android:onClick="@{() -> eventHandler.transactionDetectionSubscribeButtonClicked()}"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

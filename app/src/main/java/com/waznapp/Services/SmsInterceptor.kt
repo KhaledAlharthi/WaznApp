@@ -4,13 +4,36 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.telephony.SmsMessage
+import android.util.Log
+import com.waznapp.R
 import com.waznapp.Utilities.handleMessage
 
 
+
+/*
+*  This class is responsible for receiving SMS messages and identifying them
+*  if they belong to a Bank, then it'll extract the important information
+*  and notifies user about they're newly made transaction.
+*  We call this feature "Transaction Detection"
+* */
 class SmsInterceptor : BroadcastReceiver() {
 
     private val TAG = javaClass.simpleName
     override fun onReceive(cntxt: Context, intent: Intent) {
+        /*
+        *  First check if this feature is enabled by user
+        *  if yes, then start the process.
+        *  if no, abort and ignore
+        * */
+        /* Get user's save settings */
+        val sharedPref = cntxt.getSharedPreferences(cntxt.getString(R.string.user_pref), Context.MODE_PRIVATE)
+        /* Check the subscription state of Transaction Detection feature */
+        val isSubscribed = sharedPref.getBoolean(cntxt.getString(R.string.transaction_detection_key), false)
+        /* If state is False, abort & ignore */
+        if (!isSubscribed) return
+
+        /* Otherwise user has enabled the feature, start the process */
+
         /*
         *    Check if we're receiving a SMS message
         * */
